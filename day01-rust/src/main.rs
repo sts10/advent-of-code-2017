@@ -6,19 +6,15 @@ fn main() {
     let file_name = "input1.txt";
     let contents: Vec<u32> = file_to_vec(file_name);
 
-    let mut i: usize = 1;
     let mut sum: u32 = 0;
     // initialize before_digit to the last digit of contents
-    let contents_size = contents.len();
-    let mut before_digit: u32 = contents[contents_size-1];
+    let mut before_digit: u32 = contents[contents.len()-1];
 
     for d in contents { 
-        if i < contents_size && d == before_digit{
+        if d == before_digit{
             sum = sum + d;
         }
-
         before_digit = d;
-        i = i + 1;
     }
     println!("sum is {}", sum);
 }
