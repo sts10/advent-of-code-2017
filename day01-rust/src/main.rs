@@ -6,6 +6,10 @@ fn main() {
     let file_name = "input1.txt";
     let contents: Vec<u32> = file_to_vec(file_name);
 
+    println!("part 1 sum is {}", part_1(contents));
+}
+
+fn part_1(contents: Vec<u32>) -> (u32){
     let mut sum: u32 = 0;
     // initialize before_digit to the last digit of contents
     let mut before_digit: u32 = contents[contents.len()-1];
@@ -16,9 +20,8 @@ fn main() {
         }
         before_digit = d;
     }
-    println!("sum is {}", sum);
+    return sum;
 }
-
 fn file_to_vec(filename: &str) -> (Vec<u32>){
     // read data_str from txt file
     let mut f = File::open(filename).expect("file not found");
