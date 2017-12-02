@@ -6,22 +6,39 @@ fn main() {
     let file_name = "input1.txt";
     let contents: Vec<u32> = file_to_vec(file_name);
 
-    println!("part 1 sum is {}", part_1(contents));
+    println!("part 1 sum is {}", part_1(&contents));
+    println!("part 2 sum is {}", part_2(&contents));
 }
 
-fn part_1(contents: Vec<u32>) -> (u32){
+fn part_1(contents: &Vec<u32>) -> (u32){
     let mut sum: u32 = 0;
     // initialize before_digit to the last digit of contents
     let mut before_digit: u32 = contents[contents.len()-1];
 
     for d in contents { 
-        if d == before_digit{
+        if d == &before_digit{
             sum = sum + d;
         }
-        before_digit = d;
+        before_digit = *d;
     }
     return sum;
 }
+
+fn part_2(contents: &Vec<u32>) -> (u32){
+    let mut sum: u32 = 0;
+    let step: usize = contents.len() / 2;
+    // println!("step is {}", step);
+
+    let mut i: usize = 0;
+    while i < step {
+        if contents[i] == contents[i+step]{
+            sum = sum + contents[i] + contents[i+step];
+        }
+        i = i + 1;
+    }
+    return sum;
+}
+
 fn file_to_vec(filename: &str) -> (Vec<u32>){
     // read data_str from txt file
     let mut f = File::open(filename).expect("file not found");
