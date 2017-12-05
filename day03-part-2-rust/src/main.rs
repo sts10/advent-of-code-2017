@@ -33,6 +33,6 @@ fn build_next_point(spiral: &Vec<Point>) -> Point {
 
 fn get_length_of_side(&spiral) -> i64{
     let last_point: &Point = &spiral[spiral.len()-1];
-    let ring_number = last_point.index / 8; 
-    return ring_number* 2 + 1;
+    // let ring_number = ???
+    // return ring_number* 2 + 1;
 }
