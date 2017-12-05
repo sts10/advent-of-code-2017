@@ -11,7 +11,13 @@ fn main() {
 
 fn get_ring_number(num: usize) -> i64 {
   let square_root: f64 = (num as f64).sqrt();
-  let upper_perfect = square_root as i64 + 1;
+  let upper_perfect: i64;
+  if square_root == (square_root.floor()) {
+      // it's an odd perfect square, so don't add 1
+      upper_perfect = square_root as i64;
+  } else {
+      upper_perfect = square_root as i64 + 1;
+  }
 
   println!("upper perfect is {}", upper_perfect);
 
@@ -27,7 +33,13 @@ fn get_ring_number(num: usize) -> i64 {
 fn find_distance_to_closest_railroad(num: i64) -> i64 {
     let square_root: f64 = (num as f64).sqrt();
 
-    let upper_perfect: i64 = (square_root as i64 + 1) as i64;
+    let upper_perfect: i64;
+    if square_root == (square_root.floor()) {
+        // it's an odd perfect square, so don't add 1
+        upper_perfect = square_root as i64;
+    } else {
+        upper_perfect = (square_root as i64 + 1) as i64;
+    }
     println!("upper perfect for {} is {}", num, upper_perfect);
 
     let odd_perfect: i64;
@@ -40,7 +52,6 @@ fn find_distance_to_closest_railroad(num: i64) -> i64 {
     println!("odd perfect for {} is {}", num, odd_perfect);
 
     let last_of_row: i64 = odd_perfect * odd_perfect;
-    let first_of_row = (odd_perfect - 2) * (odd_perfect - 2) + 1;
 
     let railroad_4: i64 = last_of_row - (length_of_side - 1)/ 2;
     let railroad_3: i64 = railroad_4 - length_of_side + 1;
@@ -86,4 +97,12 @@ fn can_find_distance_to_closest_railroad() {
 fn can_find_distance_to_closest_railroad_of_perfect_squares() {
     assert_eq!(find_distance_to_closest_railroad(16), 1);
     assert_eq!(find_distance_to_closest_railroad(25), 2);
+}
+
+#[test]
+fn can_find_distances() {
+    assert_eq!(get_ring_number(12) + find_distance_to_closest_railroad(12), 3);
+    assert_eq!(get_ring_number(23) + find_distance_to_closest_railroad(23), 2);
+    assert_eq!(get_ring_number(1024) + find_distance_to_closest_railroad(1024), 31);
+    assert_eq!(get_ring_number(347991) + find_distance_to_closest_railroad(347991), 480);
 }
