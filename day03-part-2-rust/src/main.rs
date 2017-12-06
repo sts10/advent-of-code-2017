@@ -1,8 +1,10 @@
 fn main(){
+    let mut spiral: Vec<i64> = [1,1,2,4,5,10,11,23,25].to_vec();
     // println!("value at index 6 is {}", get_value_at_index(6));
     // println!("value at index 10 is {}", get_value_at_index(10));
     // println!("value at index 16 is {}", get_value_at_index(16));
-    println!("value at index 17 is {}", get_value_at_index(17));
+    println!("value at index 17 is {}", get_value_at_index(17, &mut spiral));
+    // println!("value at index 107 is {}", get_value_at_index(107, &mut spiral));
 
     // let mut v: i64 = 0;
     // let mut i: i64 = 0;
@@ -13,7 +15,7 @@ fn main(){
     // println!("Solution is {}", get_value_at_index(i));
 }
 
-fn get_value_at_index(i: i64) -> i64 {
+fn get_value_at_index(i: i64, spiral: &mut Vec<i64>) -> i64 {
     if i == 1 { return 1; }
     if i == 2 { return 1; }
     if i == 3 { return 2; }
@@ -24,47 +26,67 @@ fn get_value_at_index(i: i64) -> i64 {
     if i == 8 { return 23; }
     if i == 9 { return 25; }
 
+    if spiral.len() > i as usize{
+        return spiral[i as usize];
+    }
+
     let value: i64;
-    println!("inside index is {}, with a value of {}", inside_index_of(i), get_value_at_index(inside_index_of(i)));
+    println!("inside index is {}, with a value of {}", inside_index_of(i), get_value_at_index(inside_index_of(i), spiral));
     
     // firstvalue of new ring
     if get_ring_length_from_index(i) > get_ring_length_from_index(i-1){
-        value= get_value_at_index(i-1) 
-             + get_value_at_index(i - get_ring_length_from_index(i-1));
+        value= get_value_at_index(i-1, spiral) 
+             + get_value_at_index(i - get_ring_length_from_index(i-1), spiral);
     }
 
     // if top left corner
-    else if is_perfect_even_square(i-1){
-        value= get_value_at_index(inside_index_of(i) + get_value_at_index(i - 1));
-    }
+    // else if is_perfect_even_square(i-1){
+        // value= get_value_at_index(inside_index_of(i), spiral) 
+            // + get_value_at_index(i - 1, spiral);
+    // }
 
     // corner
     else if get_side_number_from_index(i) != get_side_number_from_index(i + 1){
-        value= get_value_at_index(inside_index_of(i))
-             + get_value_at_index(i - 1);
+        println!("At a corner at {}", i);
+        println!("sprial is {:?}", spiral);
+        println!("last value is{}", get_value_at_index(i - 1, spiral));
+        println!("inside value is {}", get_value_at_index(inside_index_of(i), spiral));
+        value= get_value_at_index(inside_index_of(i), spiral)
+             + get_value_at_index(i - 1, spiral);
     }
 
     // square mark
     else if get_side_number_from_index(i + 1) != get_side_number_from_index(i + 2){
-        value= get_value_at_index(i - 1)
-             + get_value_at_index(inside_index_of(i))
-             + get_value_at_index(inside_index_of(i-1));
+        value= get_value_at_index(i - 1, spiral)
+             + get_value_at_index(inside_index_of(i), spiral)
+             + get_value_at_index(inside_index_of(i-1), spiral);
     }
 
     // circle mark 
     else if (get_side_number_from_index(i - 1) != get_side_number_from_index(i)){
-        value= get_value_at_index(i - 1)
-             + get_value_at_index(i - 2)
-             + get_value_at_index(inside_index_of(i))
-             + get_value_at_index(inside_index_of(i+1));
+        println!("at a circle mark at {}", i);
+        // println!("last value -1 is{}", get_value_at_index((i - 2), spiral));
+        // println!("last value is{}", get_value_at_index(i - 1, spiral));
+        // println!("inside value is {}", get_value_at_index(inside_index_of(i), spiral));
+        // println!("inside value + 1 is {}", get_value_at_index(inside_index_of(i + 1), spiral));
+
+
+        value= get_value_at_index(i - 1, spiral)
+             + get_value_at_index(i - 2, spiral)
+             + get_value_at_index(inside_index_of(i), spiral)
+             + get_value_at_index(inside_index_of(i+1), spiral);
     } else {
-    value= get_value_at_index(i - 1)
-         + get_value_at_index(inside_index_of(i))
-         + get_value_at_index(inside_index_of(i+1))
-         + get_value_at_index(inside_index_of(i-1));
+    value= get_value_at_index(i - 1, spiral)
+         + get_value_at_index(inside_index_of(i), spiral)
+         + get_value_at_index(inside_index_of(i+1), spiral)
+         + get_value_at_index(inside_index_of(i-1), spiral);
     }
 
+    if spiral.len() <= i as usize{
+        spiral.push(value);
+    }
     println!("Found value at {} is {}", i, value);
+    println!("spiral is {:?}", spiral);
     return value;
 }
 
@@ -111,6 +133,17 @@ fn inside_index_of(i: i64) -> i64 {
     // corner
     if side_number != get_side_number_from_index(i + 1){
         distance = distance + 1;
+    } else {
+        // normal
+        if side_number == 4 {
+            distance = ring_length - 1;
+        } else if side_number == 3 {
+            distance = ring_length - 3;
+        } else if side_number == 2 {
+            distance = ring_length - 5;
+        } else if side_number == 1 {
+            distance = ring_length - 7;
+        }
     }
     // top left corner 
     // if is_perfect_odd_square(i + 1) {
