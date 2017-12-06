@@ -1,21 +1,66 @@
 fn main(){
-    // println!("value at index 7 is {}", get_value_at_index(7));
+    println!("value at index 6 is {}", get_value_at_index(6));
+    println!("value at index 10 is {}", get_value_at_index(10));
+    println!("value at index 16 is {}", get_value_at_index(16));
+    println!("value at index 199 is {}", get_value_at_index(199));
+    // println!("value at index 347991 is {}", get_value_at_index(347991));
 }
 
-// fn get_value_at_index(i: i64) -> i64 {
-//     if i == 1 { return 1; }
-//     if i == 2 { return 1; }
-//     if i == 3 { return 2; }
-//     if i == 4 { return 4; }
+fn get_value_at_index(i: i64) -> i64 {
+    if i == 1 { return 1; }
+    if i == 2 { return 1; }
+    if i == 3 { return 2; }
+    if i == 4 { return 4; }
+    if i == 5 { return 5; }
+    if i == 6 { return 10; }
+    if i == 7 { return 11; }
+    if i == 8 { return 23; }
+    if i == 9 { return 25; }
 
-    // if is_perfect_even_square(i) {
-    //     return get_value_at_index(inside_index_of(i)) 
-    //          + get_value_at_index(inside_index_of(i) - 1)
-    //          + get_value_at_index(i-1);
-    // }
+    let mut value: i64;
+    println!("inside index is {}, with a value of {}", inside_index_of(i), get_value_at_index(inside_index_of(i)));
+    
+    // firstvalue of new ring
+    if get_ring_length_from_index(i) > get_ring_length_from_index(i-1){
+        println!("This fired at {}", i);
+        value= get_value_at_index(i-1) 
+             + get_value_at_index(i - get_ring_length_from_index(i-1));
+    }
 
+    // if top left corner
+    else if is_perfect_even_square(i-1){
+        value= get_value_at_index(inside_index_of(i) + get_value_at_index(i - 1));
+    }
 
-// }
+    // corner
+    else if get_side_number_from_index(i) != get_side_number_from_index(i + 1){
+        value= get_value_at_index(inside_index_of(i))
+             + get_value_at_index(i - 1);
+    }
+
+    // square mark
+    else if get_side_number_from_index(i + 1) != get_side_number_from_index(i + 2){
+        value= get_value_at_index(i - 1)
+             + get_value_at_index(inside_index_of(i))
+             + get_value_at_index(inside_index_of(i-1));
+    }
+
+    // circle mark 
+    else if (get_side_number_from_index(i - 1) != get_side_number_from_index(i)){
+        value= get_value_at_index(i - 1)
+             + get_value_at_index(i - 2)
+             + get_value_at_index(inside_index_of(i))
+             + get_value_at_index(inside_index_of(i+1));
+    } else {
+    value= get_value_at_index(i - 1)
+         + get_value_at_index(inside_index_of(i))
+         + get_value_at_index(inside_index_of(i+1))
+         + get_value_at_index(inside_index_of(i-1));
+    }
+
+    println!("Found value at {} is {}", i, value);
+    return value;
+}
 
 fn is_perfect_even_square(i: i64) -> bool {
     let square_root: f64 = (i as f64).sqrt();
@@ -56,17 +101,26 @@ fn inside_index_of(i: i64) -> i64 {
         return i - ring_length;
     }
 
-    // 24 
-    if is_perfect_odd_square(i + 1) {
-        return i - ring_length - 1;
+    let mut distance = ring_length - 9 + side_number*2;
+    // corner
+    if side_number != get_side_number_from_index(i + 1){
+        distance = distance + 1;
     }
+    // top left corner 
+    // if is_perfect_odd_square(i + 1) {
+        // return i - ring_length - 1;
+    // }
 
     // standard X example. i == 11 first real example of this
 
-    return 0;
+    return i - distance;
 }
 
 fn get_ring_length_from_index(i: i64) -> i64 {
+  if i == 1 { return 1; }
+  if i <= 6 { return 8; }
+
+
   let square_root: f64 = (i as f64).sqrt();
   let upper_perfect: i64;
   if square_root == (square_root.floor()) {
@@ -76,7 +130,7 @@ fn get_ring_length_from_index(i: i64) -> i64 {
       upper_perfect = square_root as i64 + 1;
   }
 
-  println!("upper perfect is {}", upper_perfect);
+  // println!("upper perfect is {}", upper_perfect);
 
   if upper_perfect % 2 != 0{
       let ring_number = (upper_perfect - 1)/ 2;
@@ -141,4 +195,25 @@ fn can_find_side_number() {
     assert_eq!(get_side_number_from_index(18), 3);
     assert_eq!(get_side_number_from_index(19), 3);
     assert_eq!(get_side_number_from_index(23), 4);
+}
+
+#[test]
+fn can_find_side_number_corner_cases() {
+    assert_eq!(get_side_number_from_index(16), 2);
+    assert_eq!(get_side_number_from_index(17), 2);
+    assert_eq!(get_side_number_from_index(18), 3);
+    assert_eq!(get_side_number_from_index(20), 3);
+    assert_eq!(get_side_number_from_index(21), 3);
+    assert_eq!(get_side_number_from_index(22), 4);
+}
+
+#[test]
+fn can_find_inside_index_of_index(){
+    assert_eq!(inside_index_of(14),3);
+    assert_eq!(inside_index_of(23),8);
+    assert_eq!(inside_index_of(19),6);
+    
+    assert_eq!(inside_index_of(13),3);
+    assert_eq!(inside_index_of(22),7);
+    assert_eq!(inside_index_of(49),25);
 }
