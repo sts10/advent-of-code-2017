@@ -1,9 +1,16 @@
 fn main(){
-    println!("value at index 6 is {}", get_value_at_index(6));
-    println!("value at index 10 is {}", get_value_at_index(10));
-    println!("value at index 16 is {}", get_value_at_index(16));
-    println!("value at index 199 is {}", get_value_at_index(199));
-    // println!("value at index 347991 is {}", get_value_at_index(347991));
+    // println!("value at index 6 is {}", get_value_at_index(6));
+    // println!("value at index 10 is {}", get_value_at_index(10));
+    // println!("value at index 16 is {}", get_value_at_index(16));
+    println!("value at index 17 is {}", get_value_at_index(17));
+
+    // let mut v: i64 = 0;
+    // let mut i: i64 = 0;
+    // while v < 347991 {
+    //     v = get_value_at_index(i);
+    //     i = i  +1;
+    // }
+    // println!("Solution is {}", get_value_at_index(i));
 }
 
 fn get_value_at_index(i: i64) -> i64 {
@@ -17,12 +24,11 @@ fn get_value_at_index(i: i64) -> i64 {
     if i == 8 { return 23; }
     if i == 9 { return 25; }
 
-    let mut value: i64;
+    let value: i64;
     println!("inside index is {}, with a value of {}", inside_index_of(i), get_value_at_index(inside_index_of(i)));
     
     // firstvalue of new ring
     if get_ring_length_from_index(i) > get_ring_length_from_index(i-1){
-        println!("This fired at {}", i);
         value= get_value_at_index(i-1) 
              + get_value_at_index(i - get_ring_length_from_index(i-1));
     }
@@ -174,6 +180,14 @@ fn can_find_ring_length_given_index() {
     assert_eq!(get_ring_length_from_index(11), 16);
     assert_eq!(get_ring_length_from_index(18), 16);
     assert_eq!(get_ring_length_from_index(27), 24);
+}
+
+#[test]
+fn can_find_corners() {
+    assert_eq!(get_side_number_from_index(17) != get_side_number_from_index(17 + 1), true);
+    assert_eq!(get_side_number_from_index(21) != get_side_number_from_index(21 + 1), true);
+    assert_eq!(get_side_number_from_index(20) != get_side_number_from_index(20 + 1), false);
+    assert_eq!(get_side_number_from_index(22) != get_side_number_from_index(22 + 1), false);
 }
 
 #[test]
