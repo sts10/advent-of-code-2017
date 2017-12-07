@@ -2,7 +2,6 @@ fn main() {
     // let test:[i32; 4] = [0, 2, 7, 0];
     // println!("{:?}", reallocate(test));
 
-    // 3155 is too loe
     let mut current_bank:[i32; 16] = [2, 8, 8, 5, 4, 2, 3, 1, 5, 5, 1, 2, 15, 13, 5, 14];
     let mut past_banks: Vec<[i32; 16]> = [[2, 8, 8, 5, 4, 2, 3, 1, 5, 5, 1, 2, 15, 13, 5, 14]].to_vec();
     let mut number_of_cycles = 0;
@@ -11,11 +10,17 @@ fn main() {
         current_bank = reallocate(current_bank);
         number_of_cycles = number_of_cycles + 1;
         let mut exit = false;
+        let mut past_bank_number = 0; // for part 2
         for a_past_bank in &mut past_banks {
+            past_bank_number = past_bank_number + 1;
             if current_bank == *a_past_bank {
                 println!("FOUND IT");
                 println!("bank is now {:?}", current_bank);
-                println!("and number of cycles is {}", number_of_cycles);
+                println!("and that matches past bank #{}, which was {:?}", past_bank_number, *a_past_bank);
+                println!("the number of cycles to get to the bank a second time: {}", number_of_cycles);
+                println!("which happened at bank #{}", number_of_cycles + 1);
+                // for part 2:
+                println!("so number of cycles between matches is {}", number_of_cycles+1 - past_bank_number);
                 exit = true;
                 break;
             } 
