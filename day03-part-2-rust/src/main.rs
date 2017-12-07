@@ -1,9 +1,6 @@
 fn main(){
     let mut spiral: Vec<i64> = [1,1,2,4,5,10,11,23,25].to_vec();
-    // println!("value at index 6 is {}", get_value_at_index(6));
-    // println!("value at index 10 is {}", get_value_at_index(10));
-    // println!("value at index 16 is {}", get_value_at_index(16));
-    println!("value at index 17 is {}", get_value_at_index(17, &mut spiral));
+    println!("value at index 13 is {}", get_value_at_index(13, &mut spiral));
     // println!("value at index 107 is {}", get_value_at_index(107, &mut spiral));
 
     // let mut v: i64 = 0;
@@ -29,9 +26,13 @@ fn get_value_at_index(i: i64, spiral: &mut Vec<i64>) -> i64 {
     if spiral.len() > i as usize{
         return spiral[i as usize];
     }
+    if i == 12{
+        println!("I just calculated {}", i);
+        // println!("even though spiral[i] is {}", spiral[i as usize]);
+    }
 
     let value: i64;
-    println!("inside index is {}, with a value of {}", inside_index_of(i), get_value_at_index(inside_index_of(i), spiral));
+    // println!("inside index is {}, with a value of {}", inside_index_of(i), get_value_at_index(inside_index_of(i), spiral));
     
     // firstvalue of new ring
     if get_ring_length_from_index(i) > get_ring_length_from_index(i-1){
@@ -49,15 +50,15 @@ fn get_value_at_index(i: i64, spiral: &mut Vec<i64>) -> i64 {
     else if get_side_number_from_index(i) != get_side_number_from_index(i + 1){
         println!("At a corner at {}", i);
         println!("sprial is {:?}", spiral);
-        println!("last value is{}", get_value_at_index(i - 1, spiral));
+        println!("last value is{}", get_value_at_index((i - 1), spiral));
         println!("inside value is {}", get_value_at_index(inside_index_of(i), spiral));
         value= get_value_at_index(inside_index_of(i), spiral)
-             + get_value_at_index(i - 1, spiral);
+             + get_value_at_index((i - 1), spiral);
     }
 
     // square mark
     else if get_side_number_from_index(i + 1) != get_side_number_from_index(i + 2){
-        value= get_value_at_index(i - 1, spiral)
+        value= get_value_at_index((i - 1), spiral)
              + get_value_at_index(inside_index_of(i), spiral)
              + get_value_at_index(inside_index_of(i-1), spiral);
     }
@@ -82,8 +83,9 @@ fn get_value_at_index(i: i64, spiral: &mut Vec<i64>) -> i64 {
          + get_value_at_index(inside_index_of(i-1), spiral);
     }
 
-    if spiral.len() <= i as usize{
+    if spiral.len() == (i-1) as usize{
         spiral.push(value);
+        // spiral[i as usize] = value;
     }
     println!("Found value at {} is {}", i, value);
     println!("spiral is {:?}", spiral);
@@ -217,6 +219,7 @@ fn can_find_ring_length_given_index() {
 
 #[test]
 fn can_find_corners() {
+    assert_eq!(get_side_number_from_index(13) != get_side_number_from_index(13 + 1), true);
     assert_eq!(get_side_number_from_index(17) != get_side_number_from_index(17 + 1), true);
     assert_eq!(get_side_number_from_index(21) != get_side_number_from_index(21 + 1), true);
     assert_eq!(get_side_number_from_index(20) != get_side_number_from_index(20 + 1), false);
