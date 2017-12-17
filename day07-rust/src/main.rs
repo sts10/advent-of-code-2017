@@ -31,9 +31,6 @@ fn part_1(filename: &str) {
         }
         let base = str_vec[0];
         all_bases.push(String::from(str_vec[0]));
-
-        // println!("base is {}", base);
-        // println!("being held is {:?}", being_held);
     }
 
     // now need to the word that is NOT being held
