@@ -14,6 +14,8 @@ fn main() {
 
     let mut registers_hashmap: HashMap<&str, isize> = HashMap::new();
 
+    let mut highest_count_at_any_one_time: isize = 0;
+
     // first, we'll seed registers_hashmap with each key from the instructions, and set the value
     // to 0
     for instructions in &input_vec {
@@ -168,9 +170,15 @@ fn main() {
                 }
             }
         }
+
+        let mut count_vec: Vec<(&&str, &isize)> = registers_hashmap.iter().collect();
+        count_vec.sort_by(|a, b| b.1.cmp(a.1));
+        if highest_count_at_any_one_time < *count_vec[0].1 {
+            highest_count_at_any_one_time = *count_vec[0].1;
+        }
     }
 
-    // and sort by value
+    // for part 1, sort by value
     //
 
     let mut count_vec: Vec<(&&str, &isize)> = registers_hashmap.iter().collect();
@@ -179,7 +187,9 @@ fn main() {
         println!("{:?}", pair);
     }
 
-    // 3753 is too low
+    let part_1_ans = count_vec[0].1;
+    println!("answer to part 1 is {} (should be 5125)", part_1_ans);
+    println!("answer to part 2 is {} ", highest_count_at_any_one_time);
 }
 
 fn read_by_line<T: FromStr>(file_path: &str) -> io::Result<Vec<T>> {
