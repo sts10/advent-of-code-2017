@@ -19,20 +19,18 @@ fn main() {
     // first, we'll seed registers_hashmap with each key from the instructions, and set the value
     // to 0
     for instructions in &input_vec {
-        let split_instructions = instructions.split(" ");
+        let split_instructions = instructions.split(' ');
         let instructions_vec: Vec<&str> = split_instructions.collect();
         registers_hashmap.entry(instructions_vec[0]).or_insert(0);
     }
 
     // Now we'll actually read each instruction
     for instructions in &input_vec {
-        let split_instructions = instructions.split(" ");
+        let split_instructions = instructions.split(' ');
         let instructions_vec: Vec<&str> = split_instructions.collect();
         println!("{:?}", instructions_vec);
         let to_compare_to: isize = instructions_vec[6].parse::<isize>().unwrap();
 
-        println!("got to the if statements");
-        // match instructions_vec[5] {
         if instructions_vec[5] == ">" {
             println!(
                 "Right here, the left side of the comparison is {}",
@@ -188,8 +186,13 @@ fn main() {
     }
 
     let part_1_ans = count_vec[0].1;
-    println!("answer to part 1 is {} (should be 5125)", part_1_ans);
-    println!("answer to part 2 is {} ", highest_count_at_any_one_time);
+    println!("answer to part 1 is {} (should be 5215)", part_1_ans);
+    println!(
+        "answer to part 2 is {} (should be 6419)",
+        highest_count_at_any_one_time
+    );
+    assert_eq!(*part_1_ans, 5215 as isize);
+    assert_eq!(highest_count_at_any_one_time, 6419 as isize);
 }
 
 fn read_by_line<T: FromStr>(file_path: &str) -> io::Result<Vec<T>> {
