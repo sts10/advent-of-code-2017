@@ -206,8 +206,7 @@ fn read_by_line<T: FromStr>(file_path: &str) -> io::Result<Vec<T>> {
         match line?.parse() {
             Ok(l) => vec.push(l),
             Err(_e) => {
-                eprintln!("Error");
-                continue;
+                panic!("Error reading a line of the file");
             }
         }
     }
