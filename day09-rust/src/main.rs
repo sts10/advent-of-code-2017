@@ -1,13 +1,17 @@
 use std::fs::File;
 use std::io;
 use std::io::prelude::*;
-use std::io::BufRead;
-use std::io::BufReader;
-use std::str::FromStr;
+// use std::io::BufRead;
+// use std::io::BufReader;
+// use std::str::FromStr;
 fn main() {
     let file_name = "input.txt";
     let river: Vec<char> = read_string_from_file_to_vector(file_name).unwrap();
 
+    let (score, garbage_count) = get_score_and_garbage_count(river);
+    println!("score is {} and garbage is {:?}", score, garbage_count);
+}
+fn get_score_and_garbage_count(river: Vec<char>) -> (usize, usize) {
     let mut number_of_nests = 0;
     let mut score = 0;
     let mut garbage_count = 0;
@@ -40,9 +44,7 @@ fn main() {
             skip_next_char = false;
         }
     }
-    println!();
-    println!("Found score {}", score);
-    println!("Found garbage count of {}", garbage_count);
+    (score, garbage_count)
 }
 
 fn read_string_from_file_to_vector(file_path: &str) -> io::Result<Vec<char>> {
@@ -70,4 +72,44 @@ fn string_to_character_vec(string: String) -> Vec<char> {
         vec.push(c);
     }
     vec
+}
+
+#[test]
+fn can_find_score_of_short_string() {
+    let river = string_to_character_vec("{{{},{},{{}}}}".to_string());
+    assert_eq!(get_score_and_garbage_count(river).0, 16);
+}
+#[test]
+fn can_find_score_of_short_string_with_exclamation_marks() {
+    let river = string_to_character_vec("{{<!!>},{<!!>},{<!!>},{<!!>}}".to_string());
+    assert_eq!(get_score_and_garbage_count(river).0, 9);
+}
+#[test]
+fn can_find_garbage_count_of_short_string() {
+    let river = string_to_character_vec("<random characters>".to_string());
+    assert_eq!(get_score_and_garbage_count(river).1, 17);
+}
+#[test]
+fn can_find_garbage_count_of_short_string_with_exclamation_point() {
+    let river = string_to_character_vec("<{!>}>".to_string());
+    assert_eq!(get_score_and_garbage_count(river).1, 2);
+}
+#[test]
+fn can_find_garbage_count_of_long_string_with_exclamation_point() {
+    let river = string_to_character_vec("<{o\"i!a,<{i<a>".to_string());
+    assert_eq!(get_score_and_garbage_count(river).1, 10);
+}
+
+#[test]
+fn can_find_score_of_file_input() {
+    let file_name = "input.txt";
+    let river: Vec<char> = read_string_from_file_to_vector(file_name).unwrap();
+    assert_eq!(get_score_and_garbage_count(river).0, 8337);
+}
+
+#[test]
+fn can_find_garbage_count_of_file_input() {
+    let file_name = "input.txt";
+    let river: Vec<char> = read_string_from_file_to_vector(file_name).unwrap();
+    assert_eq!(get_score_and_garbage_count(river).1, 4330);
 }
