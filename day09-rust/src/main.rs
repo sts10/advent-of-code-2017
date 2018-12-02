@@ -7,11 +7,10 @@ use std::str::FromStr;
 fn main() {
     let file_name = "input.txt";
     let river: Vec<char> = read_string_from_file_to_vector(file_name).unwrap();
-    // let test_string = "{{{},{},{{}}}}";
-    // let river: Vec<char> = string_to_character_vec(test_string.to_string());
 
     let mut number_of_nests = 0;
     let mut score = 0;
+    let mut garbage_count = 0;
     let mut skip_next_char = false;
     let mut stop_reading = false;
 
@@ -26,7 +25,6 @@ fn main() {
                     number_of_nests += 1;
                 }
                 '}' => {
-                    println!("found a closing curly, score is {}", score);
                     score += number_of_nests;
                     number_of_nests -= 1;
                 }
@@ -34,7 +32,8 @@ fn main() {
                 '>' => stop_reading = false,
                 _ => (),
             }
-            print!("{}", c);
+        } else if !skip_next_char {
+            garbage_count = garbage_count + 1;
         }
         // reset skip_next_char back to false
         if skip_next_char {
@@ -43,6 +42,7 @@ fn main() {
     }
     println!();
     println!("Found score {}", score);
+    println!("Found garbage count of {}", garbage_count);
 }
 
 fn read_string_from_file_to_vector(file_path: &str) -> io::Result<Vec<char>> {
